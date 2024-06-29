@@ -17,13 +17,4 @@ OFFSET $2
 LIMIT $1;
 
 
--- name: UpdateEntrie :one
-UPDATE entries
-set amount = $2
-WHERE id = $1
-RETURNING *;
 
-
--- name: DeleteEntrie :exec
-DELETE FROM entries
-WHERE id = $1;

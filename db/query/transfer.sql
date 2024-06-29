@@ -14,17 +14,9 @@ WHERE id = $1 LIMIT 1;
 
 -- name: ListTransfers :many
 SELECT * FROM transfers
+WHERE 
+    from_account_id = $1 OR
+    to_account_id = $2
 ORDER BY id
-OFFSET $2
-LIMIT $1;
-
--- name: UpdateTransfer :one
-UPDATE transfers
-set amount = $2
-WHERE id = $1
-RETURNING *;
-
-
--- name: DeleteTransfer :exec
-DELETE FROM transfers
-WHERE id = $1;
+LIMIT $3
+OFFSET $4;
