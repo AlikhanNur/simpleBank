@@ -17,10 +17,12 @@ import (
 
 func TestCreateTransferApi(t *testing.T) {
 	amount := 10
-	fromAccount := randomAccount()
+	user, _ := RandomUser(t)
+	fromAccount := randomAccount(user.Username)
 	fromAccount.Currency = "USD"
 
-	toAccount := randomAccount()
+	user1, _ := RandomUser(t)
+	toAccount := randomAccount(user1.Username)
 	toAccount.Currency = "USD"
 
 	currency := "USD"
@@ -177,7 +179,7 @@ func TestCreateTransferApi(t *testing.T) {
 			store := mockdb.NewMockStore(ctrl)
 			tc.buildStabs(store)
 
-			server := NewServer(store)
+			server := newTestServer(t, store)
 
 			recorder := httptest.NewRecorder()
 			url := "/transfers"

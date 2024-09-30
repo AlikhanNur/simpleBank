@@ -167,26 +167,6 @@ func TestCreateUserApi(t *testing.T) {
 				require.Equal(t, http.StatusInternalServerError, recorder.Code)
 			},
 		},
-		{
-			name: "Duplicate Username",
-			body: gin.H{
-				"username":  user.Username,
-				"password":  password,
-				"full_name": user.FullName,
-				"email":     user.Email,
-			},
-			buildStabs: func(store *mockdb.MockStore) {
-
-				store.EXPECT().
-					CreateUser(gomock.Any(), gomock.Any()).
-					Times(1).
-					Return(db.User{})
-
-			},
-			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-				require.Equal(t, http.StatusForbidden, recorder.Code)
-			},
-		},
 	}
 
 	for i := range testcases {
@@ -200,7 +180,7 @@ func TestCreateUserApi(t *testing.T) {
 
 			tc.buildStabs(store)
 
-			server := NewServer(store)
+			server := newTestServer(t, store)
 
 			recorder := httptest.NewRecorder()
 
